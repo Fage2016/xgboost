@@ -952,9 +952,9 @@ DMatrix* DMatrix::Load(const std::string& uri, bool silent, DataSplitMode data_s
     data::FileIterator iter{fname, static_cast<uint32_t>(partid), static_cast<uint32_t>(npart)};
     auto config = ExtMemConfig{cache_file,
                                false,
+                               cuda_impl::AutoHostRatio(),
                                cuda_impl::MatchingPageBytes(),
                                std::numeric_limits<float>::quiet_NaN(),
-                               cuda_impl::MaxNumDevicePages(),
                                1};
     dmat = new data::SparsePageDMatrix{&iter, iter.Proxy(), data::fileiter::Reset,
                                        data::fileiter::Next, config};
@@ -1021,7 +1021,6 @@ DMatrix* DMatrix::Create(AdapterT* adapter, float missing, int nthread, const st
 INSTANTIATION_CREATE(DenseAdapter)
 INSTANTIATION_CREATE(ArrayAdapter)
 INSTANTIATION_CREATE(CSRAdapter)
-INSTANTIATION_CREATE(CSCAdapter)
 INSTANTIATION_CREATE(FileAdapter)
 INSTANTIATION_CREATE(CSRArrayAdapter)
 INSTANTIATION_CREATE(CSCArrayAdapter)
@@ -1298,7 +1297,6 @@ template uint64_t SparsePage::Push(const data::CSRArrayAdapterBatch& batch, floa
                                    int nthread);
 template uint64_t SparsePage::Push(const data::CSCArrayAdapterBatch& batch, float missing,
                                    int nthread);
-template uint64_t SparsePage::Push(const data::CSCAdapterBatch& batch, float missing, int nthread);
 template uint64_t SparsePage::Push(const data::FileAdapterBatch& batch, float missing, int nthread);
 template uint64_t SparsePage::Push(const data::ColumnarAdapterBatch& batch, float missing,
                                    std::int32_t nthread);
