@@ -1,5 +1,5 @@
 /**
- * Copyright 2015-2024, XGBoost Contributors
+ * Copyright 2015-2025, XGBoost Contributors
  * \file c_api.h
  * \author Tianqi Chen
  * \brief C API of XGBoost, used for interfacing to other languages.
@@ -149,15 +149,6 @@ XGB_DLL int XGDMatrixCreateFromFile(const char *fname, int silent, DMatrixHandle
  */
 XGB_DLL int XGDMatrixCreateFromURI(char const *config, DMatrixHandle *out);
 
-
-/*!
- * \brief create a matrix content from CSR format
- * \deprecated since 2.0.0
- * \see XGDMatrixCreateFromCSR()
- */
-XGB_DLL int XGDMatrixCreateFromCSREx(const size_t *indptr, const unsigned *indices,
-                                     const float *data, size_t nindptr, size_t nelem,
-                                     size_t num_col, DMatrixHandle *out);
 /**
  * @brief Create a DMatrix from columnar data. (table)
  *
@@ -263,14 +254,6 @@ XGB_DLL int XGDMatrixCreateFromDense(char const *data, char const *config, DMatr
 XGB_DLL int XGDMatrixCreateFromCSC(char const *indptr, char const *indices, char const *data,
                                    bst_ulong nrow, char const *config, DMatrixHandle *out);
 
-/*!
- * \brief create a matrix content from CSC format
- * \deprecated since 2.0.0
- * \see XGDMatrixCreateFromCSC()
- */
-XGB_DLL int XGDMatrixCreateFromCSCEx(const size_t *col_ptr, const unsigned *indices,
-                                     const float *data, size_t nindptr, size_t nelem,
-                                     size_t num_row, DMatrixHandle *out);
 
 /*!
  * \brief create matrix content from dense matrix
@@ -588,6 +571,10 @@ XGB_DLL int XGQuantileDMatrixCreateFromCallback(DataIterHandle iter, DMatrixHand
  *       help bound the memory usage. By default, XGBoost grows new sub-streams
  *       exponentially until batches are exhausted. Only used for the training dataset and
  *       the default is None (unbounded).
+ * - cache_host_ratio (optioinal): For GPU-based inputs, XGBoost can split the cache into
+ *      host and device portitions to reduce the data transfer overhead. This parameter
+ *      specifies the size of host cache compared to the size of the entire cache:
+ *      `host / (host + device)`.
  * @param out The created Quantile DMatrix.
  *
  * @return 0 when success, -1 when failure happens

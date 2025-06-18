@@ -15,10 +15,10 @@ std::int32_t CurrentDevice(bool raise = true);
 
 // Whether the device supports coherently accessing pageable memory without calling
 // `cudaHostRegister` on it
-bool SupportsPageableMem();
+[[nodiscard]] bool SupportsPageableMem();
 
 // Address Translation Service (ATS)
-bool SupportsAts();
+[[nodiscard]] bool SupportsAts();
 
 void CheckComputeCapability();
 
@@ -34,4 +34,7 @@ void RtVersion(std::int32_t* major, std::int32_t* minor);
 
 // Returns the latest version of CUDA supported by the driver.
 void DrVersion(std::int32_t* major, std::int32_t* minor);
+
+// Get the current device's numa ID.
+[[nodiscard]] std::int32_t GetNumaId();
 }  // namespace xgboost::curt
